@@ -1,0 +1,754 @@
+<!-- Developed by Nikil Ashika R, B.E. CSE 2nd Year -->
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="StudyHub - A modern, production-quality academic productivity workspace for college students by Nikil Ashika R.">
+  <meta name="author" content="Nikil Ashika R">
+  <title>StudyHub | by Nikil Ashika R</title>
+
+  <!-- Google Fonts: Poppins & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Dynamic Moving Background Layers -->
+  <div id="bg-container" aria-hidden="true">
+    <div class="bg-aurora"></div>
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+    <div class="bg-blob blob-3"></div>
+    <canvas id="particle-canvas"></canvas>
+    <div id="floating-glyphs-container" class="floating-glyphs"></div>
+  </div>
+
+  <!-- Cursor Follower Spotlight -->
+  <div id="cursor-glow" aria-hidden="true"></div>
+
+  <!-- Sticky Glass Navbar (Section A) -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="#home" class="nav-brand" aria-label="StudyHub Home">
+        <div class="brand-icon-box">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <span class="gradient-text">StudyHub</span>
+      </a>
+
+      <!-- Desktop & Mobile Nav Links -->
+      <nav id="nav-links" class="nav-links" aria-label="Main Navigation">
+        <a href="#home" class="nav-link active">Home</a>
+        <a href="#focus" class="nav-link">Focus</a>
+        <a href="#tasks" class="nav-link">Tasks</a>
+        <a href="#cgpa" class="nav-link">CGPA</a>
+        <a href="#flashcards" class="nav-link">Flashcards</a>
+        <a href="#notes" class="nav-link">Notes</a>
+        <a href="#exams" class="nav-link">Exams</a>
+        <a href="#about" class="nav-link">About</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle dark/light theme" title="Toggle Theme">
+          <i class="fa-solid fa-sun"></i>
+        </button>
+        <button id="hamburger-btn" class="hamburger-btn" aria-label="Open mobile navigation menu" aria-expanded="false">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section (Section B) -->
+  <section id="home" class="hero-section">
+    <div class="container">
+      <div class="author-pill">
+        <span class="dot"></span>
+        <span>Built by <strong>Nikil Ashika R</strong> • CEG Anna University</span>
+      </div>
+
+      <h1 class="hero-title">
+        The Academic Workspace to<br>
+        <span class="typewriter-wrapper">
+          <span id="typewriter-text"></span><span class="typewriter-cursor">&nbsp;</span>
+        </span>
+      </h1>
+
+      <p class="hero-subtitle">
+        An all-in-one workstation for college students. Master your coursework with Pomodoro focus sessions, task tracking, Anna University CGPA calculations, and smart active-recall flashcards.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="#focus" class="btn btn-primary">
+          <i class="fa-solid fa-play"></i> Start Focusing
+        </a>
+        <a href="#cgpa" class="btn btn-secondary">
+          <i class="fa-solid fa-calculator"></i> Calculate CGPA
+        </a>
+      </div>
+
+      <!-- Rotating Motivational Quote Card -->
+      <div class="glass-panel quote-box">
+        <div class="quote-icon">
+          <i class="fa-solid fa-quote-left"></i>
+        </div>
+        <div class="quote-content">
+          <p id="hero-quote-text" class="quote-text">"Success is the sum of small efforts, repeated day in and day out."</p>
+          <span id="hero-quote-author" class="quote-author">— Robert Collier</span>
+        </div>
+        <button id="quote-refresh-btn" class="quote-refresh-btn" title="Next Motivational Quote" aria-label="Refresh Quote">
+          <i class="fa-solid fa-rotate"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Strip (Section C) -->
+  <section class="stats-section reveal">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="glass-panel stat-card glass-card-interactive">
+          <div class="stat-icon-wrap icon-fire">
+            <i class="fa-solid fa-fire-flame-curved"></i>
+          </div>
+          <div>
+            <div id="stat-streak" class="stat-value">0</div>
+            <div class="stat-label">Daily Study Streak</div>
+          </div>
+        </div>
+
+        <div class="glass-panel stat-card glass-card-interactive">
+          <div class="stat-icon-wrap icon-clock">
+            <i class="fa-solid fa-clock"></i>
+          </div>
+          <div>
+            <div id="stat-focus" class="stat-value">0</div>
+            <div class="stat-label">Focus Minutes Today</div>
+          </div>
+        </div>
+
+        <div class="glass-panel stat-card glass-card-interactive">
+          <div class="stat-icon-wrap icon-check">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
+          <div>
+            <div id="stat-tasks" class="stat-value">0</div>
+            <div class="stat-label">Tasks Completed</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Focus Timer / Pomodoro (Section D) -->
+  <section id="focus" class="pomodoro-section reveal">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag"><i class="fa-solid fa-stopwatch"></i> Focus Timer</span>
+        <h2 class="section-title">Deep Work & Pomodoro</h2>
+        <p class="section-desc">Beat procrastination with structured focus blocks, rhythmic rest breaks, and ambient audio signals.</p>
+      </div>
+
+      <div class="glass-panel pomodoro-wrapper">
+        <!-- Mode Tabs -->
+        <div class="pomo-mode-tabs" role="tablist">
+          <button class="pomo-tab active" data-mode="focus" role="tab">Focus (25m)</button>
+          <button class="pomo-tab" data-mode="shortBreak" role="tab">Short Break (5m)</button>
+          <button class="pomo-tab" data-mode="longBreak" role="tab">Long Break (15m)</button>
+        </div>
+
+        <!-- SVG Circular Ring -->
+        <div class="timer-display-container">
+          <svg class="timer-svg" viewBox="0 0 280 280">
+            <defs>
+              <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#8b5cf6" />
+                <stop offset="100%" stop-color="#06b6d4" />
+              </linearGradient>
+            </defs>
+            <circle class="timer-bg-circle" cx="140" cy="140" r="120"></circle>
+            <circle id="timer-progress" class="timer-progress-circle" cx="140" cy="140" r="120"></circle>
+          </svg>
+
+          <div class="timer-center-text">
+            <div id="timer-digits" class="timer-digits">25:00</div>
+            <div id="timer-status" class="timer-status-badge">Focus Time</div>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="timer-controls">
+          <button id="timer-start-btn" class="btn btn-primary timer-main-btn">
+            <i class="fa-solid fa-play"></i> Start
+          </button>
+          <button id="timer-reset-btn" class="btn btn-secondary btn-icon-only" title="Reset Timer" aria-label="Reset Timer">
+            <i class="fa-solid fa-rotate-left"></i>
+          </button>
+          <button id="timer-skip-btn" class="btn btn-secondary btn-icon-only" title="Skip Session" aria-label="Skip Session">
+            <i class="fa-solid fa-forward-step"></i>
+          </button>
+          <button id="timer-settings-btn" class="btn btn-secondary btn-icon-only" title="Customize Durations" aria-label="Customize Durations">
+            <i class="fa-solid fa-gear"></i>
+          </button>
+        </div>
+
+        <div class="pomo-footer-info">
+          <div>
+            <i class="fa-solid fa-trophy" style="color: var(--accent-amber);"></i>
+            Completed Sessions: <strong id="pomodoro-completed-count" style="color: var(--text-primary);">0</strong>
+          </div>
+          <div>
+            <i class="fa-solid fa-bell" style="color: var(--accent-cyan);"></i> Web Audio Harmonic Chime
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pomodoro Settings Modal -->
+  <div id="pomo-settings-modal" class="pomo-settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
+    <div class="glass-panel settings-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 id="settings-modal-title" class="task-panel-title" style="margin: 0;"><i class="fa-solid fa-sliders"></i> Timer Settings</h3>
+        <button id="close-pomo-settings" class="task-action-btn" aria-label="Close Settings">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="pomo-settings-form">
+        <div class="form-group" style="margin-bottom: 1.25rem;">
+          <label class="form-label" for="pomo-input-focus">Focus Duration (minutes)</label>
+          <input type="number" id="pomo-input-focus" class="form-input" min="1" max="120" required>
+        </div>
+        <div class="form-group" style="margin-bottom: 1.25rem;">
+          <label class="form-label" for="pomo-input-short">Short Break (minutes)</label>
+          <input type="number" id="pomo-input-short" class="form-input" min="1" max="60" required>
+        </div>
+        <div class="form-group" style="margin-bottom: 1.75rem;">
+          <label class="form-label" for="pomo-input-long">Long Break (minutes)</label>
+          <input type="number" id="pomo-input-long" class="form-input" min="1" max="90" required>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+            <i class="fa-solid fa-check"></i> Save Durations
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Task Planner (Section E) -->
+  <section id="tasks" class="tasks-section reveal">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag"><i class="fa-solid fa-list-check"></i> Task Planner</span>
+        <h2 class="section-title">Organize Your Academic Work</h2>
+        <p class="section-desc">Manage lab deliverables, theory assignments, and project deadlines with overdue alerts and completion tracking.</p>
+      </div>
+
+      <div class="tasks-layout">
+        <!-- Task Creation Form -->
+        <div class="glass-panel task-form-panel">
+          <h3 class="task-panel-title"><i class="fa-solid fa-plus-circle" style="color: var(--accent-violet);"></i> Add New Task</h3>
+          <form id="task-form">
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label class="form-label" for="task-input-title">Task Title</label>
+              <input type="text" id="task-input-title" class="form-input" placeholder="e.g. Complete Lab Exercise 4" required>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label class="form-label" for="task-input-subject">Subject / Course</label>
+              <input type="text" id="task-input-subject" class="form-input" placeholder="e.g. Database Systems">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label class="form-label" for="task-input-priority">Priority</label>
+              <select id="task-input-priority" class="form-select">
+                <option value="high">High Priority</option>
+                <option value="medium" selected>Medium Priority</option>
+                <option value="low">Low Priority</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+              <label class="form-label" for="task-input-due">Due Date & Time</label>
+              <input type="datetime-local" id="task-input-due" class="form-input">
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+              <i class="fa-solid fa-check"></i> Add to Planner
+            </button>
+          </form>
+        </div>
+
+        <!-- Task List and Filters -->
+        <div class="glass-panel task-list-panel">
+          <!-- Filters & Sorting -->
+          <div class="task-filter-bar">
+            <div class="task-filters">
+              <button class="filter-btn active" data-filter="all">All</button>
+              <button class="filter-btn" data-filter="active">Active</button>
+              <button class="filter-btn" data-filter="done">Done</button>
+            </div>
+            <div>
+              <select id="task-sort-select" class="task-sort-select" aria-label="Sort tasks">
+                <option value="dueDate">Sort by Due Date</option>
+                <option value="priority">Sort by Priority</option>
+                <option value="title">Sort by Title</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="task-progress-box">
+            <div class="task-progress-header">
+              <span>Overall Progress</span>
+              <span id="task-progress-text">0 of 0 completed (0%)</span>
+            </div>
+            <div class="progress-track">
+              <div id="task-progress-fill" class="progress-fill"></div>
+            </div>
+          </div>
+
+          <!-- Dynamic Items List -->
+          <div id="task-items-list" class="task-items-list" role="list"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CGPA / GPA Calculator (Section F) -->
+  <section id="cgpa" class="cgpa-section reveal">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag"><i class="fa-solid fa-graduation-cap"></i> CGPA Engine</span>
+        <h2 class="section-title">Anna University GPA & CGPA Calculator</h2>
+        <p class="section-desc">Accurate Regulation grading points ($O=10, A+=9, A=8, B+=7, B=6, C=5, RA=0$), cumulative aggregate tracking, and target GPA solver.</p>
+      </div>
+
+      <div class="cgpa-grid">
+        <!-- Courses Table Panel -->
+        <div class="glass-panel courses-table-panel">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 class="task-panel-title" style="margin: 0;"><i class="fa-solid fa-book-bookmark" style="color: var(--accent-cyan);"></i> Semester Coursework</h3>
+            <button id="add-course-btn" class="btn btn-secondary btn-sm">
+              <i class="fa-solid fa-plus"></i> Add Course
+            </button>
+          </div>
+
+          <!-- Table Header -->
+          <div class="cgpa-table-header">
+            <span>Subject Title</span>
+            <span>Credits</span>
+            <span>Grade</span>
+            <span></span>
+          </div>
+
+          <!-- Course Rows Container -->
+          <div id="course-rows-container" class="course-rows-container"></div>
+
+          <div class="cgpa-table-actions">
+            <button id="reset-courses-btn" class="btn btn-secondary btn-sm">
+              <i class="fa-solid fa-arrow-rotate-left"></i> Reset to Defaults
+            </button>
+            <span style="font-size: 0.8rem; color: var(--text-muted); align-self: center;">
+              * Auto-calculated on change
+            </span>
+          </div>
+        </div>
+
+        <!-- Result & Helper Panel -->
+        <div class="glass-panel cgpa-result-panel">
+          <div class="cgpa-score-box">
+            <div class="cgpa-label">Semester GPA</div>
+            <div id="cgpa-display-gpa" class="cgpa-display-number">0.00</div>
+            <div id="cgpa-classification" class="cgpa-grade-status">First Class with Distinction ⭐</div>
+          </div>
+
+          <div class="cgpa-stats-mini">
+            <div class="mini-stat-card">
+              <div class="mini-stat-title">Total Credits</div>
+              <div id="cgpa-total-credits" class="mini-stat-val">0</div>
+            </div>
+            <div class="mini-stat-card">
+              <div class="mini-stat-title">Equivalent %</div>
+              <div id="cgpa-percentage-val" class="mini-stat-val">0.0%</div>
+            </div>
+          </div>
+
+          <!-- Cumulative & Target CGPA Helper -->
+          <div class="cgpa-helper-card">
+            <div class="helper-title">
+              <i class="fa-solid fa-bullseye"></i> Cumulative & Target Solver
+            </div>
+            <div class="helper-inputs">
+              <div class="form-group">
+                <label class="form-label" for="prev-credits-input">Prior Credits Earned</label>
+                <input type="number" id="prev-credits-input" class="form-input" placeholder="e.g. 42" value="44">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="prev-cgpa-input">Prior Cumulative CGPA</label>
+                <input type="number" id="prev-cgpa-input" class="form-input" step="0.01" placeholder="e.g. 8.65" value="8.72">
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-top: 1px solid var(--glass-card-border);">
+              <span style="font-size: 0.88rem; font-weight: 600;">Overall Cumulative CGPA:</span>
+              <strong id="cumulative-cgpa-display" style="font-size: 1.25rem; color: var(--accent-violet);">8.72</strong>
+            </div>
+
+            <div class="helper-inputs">
+              <div class="form-group">
+                <label class="form-label" for="target-cgpa-input">Goal Target CGPA</label>
+                <input type="number" id="target-cgpa-input" class="form-input" step="0.01" placeholder="e.g. 9.00" value="9.00">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="next-credits-input">Next Semester Credits</label>
+                <input type="number" id="next-credits-input" class="form-input" value="22">
+              </div>
+            </div>
+
+            <div id="target-helper-result" class="helper-result-msg">
+              Enter target details to calculate required future semester grades.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Flashcards (Section G) -->
+  <section id="flashcards" class="flashcards-section reveal">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag"><i class="fa-solid fa-layer-group"></i> Active Recall</span>
+        <h2 class="section-title">Interactive Flashcards</h2>
+        <p class="section-desc">Retain core computer science definitions and algorithms through spaced repetition and 3D card flips.</p>
+      </div>
+
+      <!-- Deck Bar -->
+      <div class="flashcards-deck-bar">
+        <div class="deck-select-group">
+          <label for="flashcard-deck-select" class="form-label" style="margin: 0; font-weight: 600;">Active Deck:</label>
+          <select id="flashcard-deck-select" class="form-select deck-selector" aria-label="Select study deck"></select>
+        </div>
+        <button id="add-card-btn" class="btn btn-secondary btn-sm">
+          <i class="fa-solid fa-plus"></i> Add New Card
+        </button>
+      </div>
+
+      <!-- 3D Flip Card Scene -->
+      <div id="flashcard-scene" class="flashcard-scene" role="button" tabindex="0" aria-label="Flashcard. Click or press space to flip.">
+        <div id="flashcard-inner" class="flashcard-inner">
+          <!-- Front Face (Question) -->
+          <div class="flashcard-face flashcard-front">
+            <div style="display: flex; justify-content: space-between; width: 100%;">
+              <span id="flashcard-deck-tag" class="card-top-tag">Data Structures</span>
+              <span id="flashcard-status-tag"></span>
+            </div>
+            <div id="flashcard-question" class="card-main-text">Loading question...</div>
+            <div class="card-hint-text">
+              <i class="fa-solid fa-hand-pointer"></i> Click card or press [Space] to reveal answer
+            </div>
+          </div>
+
+          <!-- Back Face (Answer) -->
+          <div class="flashcard-face flashcard-back">
+            <div style="display: flex; justify-content: space-between; width: 100%;">
+              <span class="card-top-tag" style="color: var(--accent-cyan);">Explanation / Answer</span>
+              <span style="font-size: 0.8rem; color: var(--text-muted);"><i class="fa-solid fa-check"></i> Answer View</span>
+            </div>
+            <div id="flashcard-answer" class="card-main-text">Loading answer...</div>
+            <div class="card-hint-text">
+              <i class="fa-solid fa-rotate-left"></i> Click again to flip back
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flashcard Controls -->
+      <div class="flashcard-controls">
+        <button id="card-prev-btn" class="btn btn-secondary btn-icon-only" title="Previous Card" aria-label="Previous Card">
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <button id="card-flip-btn" class="btn btn-secondary">
+          <i class="fa-solid fa-repeat"></i> Flip Card
+        </button>
+        <span id="flashcard-counter" class="flashcard-counter">1 / 4</span>
+        <button id="card-next-btn" class="btn btn-secondary btn-icon-only" title="Next Card" aria-label="Next Card">
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <button id="card-shuffle-btn" class="btn btn-secondary btn-icon-only" title="Shuffle Deck" aria-label="Shuffle Deck">
+          <i class="fa-solid fa-shuffle"></i>
+        </button>
+      </div>
+
+      <!-- Mastery Feedback Controls -->
+      <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem;">
+        <button id="card-review-btn" class="btn btn-secondary btn-sm" style="border-color: rgba(245, 158, 11, 0.4); color: var(--accent-amber);">
+          <i class="fa-solid fa-rotate-right"></i> Need Review
+        </button>
+        <button id="card-master-btn" class="btn btn-secondary btn-sm" style="border-color: rgba(16, 185, 129, 0.4); color: var(--accent-emerald);">
+          <i class="fa-solid fa-check-double"></i> Mark Mastered
+        </button>
+      </div>
+
+      <!-- Mastery Progress -->
+      <div class="flashcard-mastery-bar">
+        <div class="task-progress-header">
+          <span>Deck Mastery</span>
+          <span id="flashcard-mastery-text">0 of 0 Mastered (0%)</span>
+        </div>
+        <div class="progress-track">
+          <div id="flashcard-mastery-fill" class="progress-fill" style="background: var(--gradient-accent);"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Add Card Modal -->
+  <div id="add-card-modal" class="deck-modal" role="dialog" aria-modal="true" aria-labelledby="add-card-modal-title">
+    <div class="glass-panel settings-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 id="add-card-modal-title" class="task-panel-title" style="margin: 0;"><i class="fa-solid fa-plus-circle"></i> Add Flashcard</h3>
+        <button id="close-add-card-modal" class="task-action-btn" aria-label="Close modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="add-card-form">
+        <div class="form-group" style="margin-bottom: 1.25rem;">
+          <label class="form-label" for="card-input-question">Question / Prompt (Front)</label>
+          <textarea id="card-input-question" class="form-textarea" rows="3" placeholder="e.g. What is the time complexity of binary search?" required></textarea>
+        </div>
+        <div class="form-group" style="margin-bottom: 1.75rem;">
+          <label class="form-label" for="card-input-answer">Answer / Explanation (Back)</label>
+          <textarea id="card-input-answer" class="form-textarea" rows="4" placeholder="e.g. O(log n) because the search space is halved at every comparison." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">
+          <i class="fa-solid fa-check"></i> Save Flashcard
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Notes and Resources (Section H) -->
+  <section id="notes" class="notes-section reveal">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag"><i class="fa-solid fa-book-open-reader"></i> Knowledge Base</span>
+        <h2 class="section-title">Notes & Academic Resources</h2>
+        <p class="section-desc">Store semester cheatsheets, subject summaries, and bookmark essential Anna University portals.</p>
+      </div>
+
+      <!-- Search and Add Notes Bar -->
+      <div class="notes-search-bar">
+        <div class="notes-search-input-wrap">
+          <i class="fa-solid fa-magnifying-glass notes-search-icon"></i>
+          <input type="text" id="notes-search-input" class="form-input notes-search-input" placeholder="Search notes by title, tag, or content...">
+        </div>
+        <button id="add-note-btn" class="btn btn-primary">
+          <i class="fa-solid fa-plus"></i> Add Note
+        </button>
+      </div>
+
+      <!-- Notes Grid -->
+      <div id="notes-grid" class="notes-grid"></div>
+
+      <!-- Useful Links & Academic Resources Panel -->
+      <div class="glass-panel resources-panel">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <h3 class="resources-title" style="margin: 0;">
+            <i class="fa-solid fa-link" style="color: var(--accent-cyan);"></i> Essential University Resources
+          </h3>
+          <button id="add-resource-btn" class="btn btn-secondary btn-sm">
+            <i class="fa-solid fa-plus"></i> Bookmark Link
+          </button>
+        </div>
+
+        <div id="resources-grid" class="resources-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Note Modal -->
+  <div id="note-modal" class="deck-modal" role="dialog" aria-modal="true" aria-labelledby="note-modal-title">
+    <div class="glass-panel settings-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 id="note-modal-title" class="task-panel-title" style="margin: 0;"><i class="fa-solid fa-pen-nib"></i> Create Study Note</h3>
+        <button id="close-note-modal" class="task-action-btn" aria-label="Close modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="note-form">
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" for="note-input-title">Note Title</label>
+          <input type="text" id="note-input-title" class="form-input" placeholder="e.g. Operating Systems Paging Notes" required>
+        </div>
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" for="note-input-tag">Category Tag</label>
+          <select id="note-input-tag" class="form-select">
+            <option value="cse">CSE Core</option>
+            <option value="math">Math / Theory</option>
+            <option value="lab">Laboratory</option>
+            <option value="general">General</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label class="form-label" for="note-input-body">Content</label>
+          <textarea id="note-input-body" class="form-textarea" rows="5" placeholder="Key concepts, algorithms, formulas..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">
+          <i class="fa-solid fa-check"></i> Save Note
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Resource Modal -->
+  <div id="resource-modal" class="deck-modal" role="dialog" aria-modal="true" aria-labelledby="res-modal-title">
+    <div class="glass-panel settings-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 id="res-modal-title" class="task-panel-title" style="margin: 0;"><i class="fa-solid fa-bookmark"></i> Bookmark Link</h3>
+        <button id="close-resource-modal" class="task-action-btn" aria-label="Close modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="resource-form">
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" for="res-input-name">Resource Name</label>
+          <input type="text" id="res-input-name" class="form-input" placeholder="e.g. Anna Univ ACOE Portal" required>
+        </div>
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" for="res-input-category">Category</label>
+          <input type="text" id="res-input-category" class="form-input" placeholder="e.g. Exam & Results" required>
+        </div>
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label class="form-label" for="res-input-url">URL</label>
+          <input type="url" id="res-input-url" class="form-input" placeholder="https://..." required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">
+          <i class="fa-solid fa-check"></i> Save Bookmark
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Exam Countdown (Section I) -->
+  <section id="exams" class="exams-section reveal">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag"><i class="fa-solid fa-stopwatch-20"></i> Semester Schedule</span>
+        <h2 class="section-title">Upcoming Exam Countdown</h2>
+        <p class="section-desc">Track days, hours, and minutes remaining for your semester theory examinations and lab viva.</p>
+      </div>
+
+      <div class="exams-header-actions">
+        <button id="add-exam-btn" class="btn btn-secondary btn-sm">
+          <i class="fa-solid fa-plus"></i> Add Exam
+        </button>
+      </div>
+
+      <div id="exams-grid" class="exams-grid"></div>
+    </div>
+  </section>
+
+  <!-- Add Exam Modal -->
+  <div id="exam-modal" class="deck-modal" role="dialog" aria-modal="true" aria-labelledby="exam-modal-title">
+    <div class="glass-panel settings-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 id="exam-modal-title" class="task-panel-title" style="margin: 0;"><i class="fa-solid fa-calendar-plus"></i> Schedule Exam</h3>
+        <button id="close-exam-modal" class="task-action-btn" aria-label="Close modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="exam-form">
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" for="exam-input-name">Subject Name</label>
+          <input type="text" id="exam-input-name" class="form-input" placeholder="e.g. Distributed Systems" required>
+        </div>
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" for="exam-input-code">Course / Paper Code</label>
+          <input type="text" id="exam-input-code" class="form-input" placeholder="e.g. CS3551">
+        </div>
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label class="form-label" for="exam-input-date">Exam Date & Time</label>
+          <input type="datetime-local" id="exam-input-date" class="form-input" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">
+          <i class="fa-solid fa-check"></i> Add Exam Countdown
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- About the Developer Card (Section J) -->
+  <section id="about" class="about-section reveal">
+    <div class="container">
+      <div class="glass-panel developer-card">
+        <div class="dev-card-content">
+          <div class="dev-avatar-box">
+            <i class="fa-solid fa-user-graduate"></i>
+          </div>
+          <div class="dev-info">
+            <span class="dev-badge"><i class="fa-solid fa-code"></i> Engineering Student & Developer</span>
+            <h2 class="dev-name">Nikil Ashika R</h2>
+            <div class="dev-role">B.E. Computer Science and Engineering, 2nd Year</div>
+            <div class="dev-college">
+              <i class="fa-solid fa-building-columns" style="color: var(--accent-violet);"></i>
+              College of Engineering, Guindy, Anna University
+            </div>
+            <div class="dev-social-links">
+              <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="social-btn" title="GitHub Profile">
+                <i class="fa-brands fa-github"></i> GitHub
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-btn" title="LinkedIn Profile">
+                <i class="fa-brands fa-linkedin"></i> LinkedIn
+              </a>
+              <a href="mailto:nikilashika@example.com" class="social-btn" title="Send Email">
+                <i class="fa-solid fa-envelope"></i> Contact
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer (Section K) -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-text">
+        Designed &amp; Developed by <span class="footer-dev-name">Nikil Ashika R</span>
+      </p>
+      <p class="footer-subtext">
+        &copy; <span id="current-year"></span> StudyHub. All rights reserved • College of Engineering, Guindy (CEG).
+      </p>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" aria-live="polite"></div>
+
+  <!-- Modular Scripts -->
+  <script src="js/background.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/pomodoro.js"></script>
+  <script src="js/todo.js"></script>
+  <script src="js/cgpa.js"></script>
+  <script src="js/flashcards.js"></script>
+  <script src="js/notes.js"></script>
+</body>
+</html>
+
